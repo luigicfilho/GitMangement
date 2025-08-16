@@ -1,0 +1,30 @@
+name: Unfollow Non-Followers
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch: 
+    inputs: {}
+
+jobs:
+  unfollow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run unfollow script
+        env:
+          GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python unfollow_non_followers.py
