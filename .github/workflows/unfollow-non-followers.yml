@@ -25,6 +25,6 @@ jobs:
 
       - name: Run unfollow script
         env:
-          GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+          GITHUB_USERNAME: ${{ github.repository_owner }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python unfollow_non_followers.py
