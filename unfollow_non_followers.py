@@ -14,8 +14,10 @@ HEADERS = {
 }
 
 if not USERNAME:
+    USERNAME = github.repository_owner
     raise ValueError("Variável de ambiente GITHUB_USERNAME não está definida.")
 if not TOKEN:
+    TOKEN = secrets.GITHUB_TOKEN
     raise ValueError("Variável de ambiente GITHUB_TOKEN não está definida.")
 
 def get_followers():
