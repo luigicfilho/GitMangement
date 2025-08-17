@@ -1,4 +1,4 @@
-# Git Mangement
+# Git Mangement - AntiCheat
 
 An automatic GitHub followers manager.
 
