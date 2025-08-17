@@ -4,6 +4,7 @@ An automatic GitHub followers manager.
 
 > [!WARNING] 
 > This was create to prevent the trick usually done to artificially grow your followers. A anticheat system to avoid tricksters.
+> 
 > The trick is: People follow you and when you follow back they unfollow, this way they get more followers than people they are following, this is etically wrong and this will unfollow them back. 
 
 This repository contains a GitHub Action that runs daily at **03:00 UTC** and performs the following tasks:
