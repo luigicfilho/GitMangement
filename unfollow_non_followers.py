@@ -14,24 +14,27 @@ HEADERS = {
 }
 
 if not USERNAME:
-    raise ValueError("Variável de ambiente GITHUB_USERNAME não está definida.")
+    raise ValueError("The Environment variable GITHUB_USERNAME is not defined.")
 if not TOKEN:
-    raise ValueError("Variável de ambiente GITHUB_TOKEN não está definida.")
+    raise ValueError("The Environment variable GITHUB_TOKEN is not defined.")
 
 def get_followers():
+    """Get the GitHub API url for followers management."""
     url = f"https://api.github.com/users/{USERNAME}/followers?per_page=100"
     return fetch_all_pages(url)
 
 def get_following():
+    """Get the GitHub API url for following management."""
     url = f"https://api.github.com/users/{USERNAME}/following?per_page=100"
     return fetch_all_pages(url)
 
 def fetch_all_pages(url):
+    """Get all items from a GitHub pagination."""
     items = []
     while url:
         response = requests.get(url, headers=HEADERS)
         if response.status_code != 200:
-            print(f"Erro ao acessar {url}: {response.status_code} - {response.text}")
+            print(f"Erro on access: {url}: {response.status_code} - {response.text}")
             break
 
         items.extend([user['login'] for user in response.json()])
@@ -41,15 +44,17 @@ def fetch_all_pages(url):
     return items
 
 def unfollow_user(username):
+    """Make the request to GitHub API to unfollow the user."""
     url = f"https://api.github.com/user/following/{username}"
     response = requests.delete(url, headers=HEADERS)
     if response.status_code == 204:
-        print(f"Deixou de seguir: {username}")
+        print(f"You are now following any more: {username}")
     else:
-        print(f"Falha ao deixar de seguir {username}: {response.status_code}")
+        print(f"Error on remove from following {username}: {response.status_code}")
 
 def read_exceptions(filename="usersfollow.txt"):
-    """Lê o arquivo de exceções e retorna um conjunto de usernames (ignorando linhas vazias e comentários)."""
+    """Read the exceptions file and return the list of usernames
+    (ignoring empty lines and comments)."""
     exceptions = set()
     if not os.path.exists(filename):
         print(f"⚠️ {filename} not found. No exceptions applied.")
@@ -63,31 +68,34 @@ def read_exceptions(filename="usersfollow.txt"):
     return exceptions
 
 def main():
+    """Main function that will get all followers and following,
+    apply the exceptions from a file, unfollow any people that 
+    is not following you that is not in the file."""
     if not USERNAME or not TOKEN:
-        print("GITHUB_USERNAME ou GITHUB_TOKEN não definidos.")
+        print("GITHUB_USERNAME or GITHUB_TOKEN not defined.")
         return
 
-    print("Buscando seguidores...")
+    print("Getting all followers...")
     followers = set(get_followers())
-    print(f"Você tem {len(followers)} seguidores.")
+    print(f"You have {len(followers)} followers.")
 
-    print("Buscando pessoas que você segue...")
+    print("Getting people that you are following...")
     following = set(get_following())
-    print(f"Você está seguindo {len(following)} pessoas.")
+    print(f"You are following {len(following)} peoples.")
 
     exceptions = read_exceptions()
     not_following_back = following - followers
     
     filtered_not_following_back = sorted(not_following_back - exceptions)
-    print(f"{len(not_following_back)} pessoas não te seguem de volta.")
+    print(f"{len(filtered_not_following_back)} people don't follow you back.")
 
     if filtered_not_following_back:
-        print("\n Começando a deixar de seguir...")
+        print("\n Unfollowing...")
         for user in sorted(filtered_not_following_back):
             unfollow_user(user)
             time.sleep(1)
     else:
-        print("Todos que você segue te seguem de volta!")
+        print("All people that you are following, follow you back!")
 
 if __name__ == "__main__":
     main()
