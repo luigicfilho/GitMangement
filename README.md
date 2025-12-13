@@ -66,4 +66,4 @@ friend-user-2
 1. Clone or fork the repository.  
 2. Create your exceptions file, or edit the `usersfollow.txt`.  
 3. Customize the cleanup script according to your needs.  
-5. Commit and push — the Action will run automatically every day at 03:00 UTC.  
+5. Commit and push — the Action will run automatically every day at 03:00 UTC.
